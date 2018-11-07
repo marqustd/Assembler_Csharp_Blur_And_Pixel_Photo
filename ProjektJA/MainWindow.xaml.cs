@@ -1,43 +1,49 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using GaussBlur;
+using Microsoft.Win32;
 
 namespace ProjektJA
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly IGaussBlurCs blurCsEngine;
+        private Bitmap after;
+        private BitmapImage sourceBitMapImage;
+
         public MainWindow()
         {
+            blurCsEngine = new GaussBlurCs();
             InitializeComponent();
         }
 
-        private void Image_Loaded(object sender, RoutedEventArgs e)
+        private void OpenFile(object sender, RoutedEventArgs e)
         {
-            // ... Create a new BitmapImage.
-            BitmapImage b = new BitmapImage();
-            b.BeginInit();
-            b.UriSource = new Uri(@"C:\Users\marek\Documents\Git\ProjektJA\ProjektJA\bin\Debug\test.jpg");
-            b.EndInit();
+            var openFileDialog = new OpenFileDialog();
 
-            // ... Get Image reference from sender.
-            var image = sender as Image;
-            // ... Assign Source.
-            image.Source = b;
+            openFileDialog.Filter = "Obrazy (*.bmp;*.jpg;*.png)|*.bmp;*.jpg;*.png";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                sourceBitMapImage = new BitmapImage();
+                sourceBitMapImage.BeginInit();
+                sourceBitMapImage.UriSource = new Uri(openFileDialog.FileName);
+                sourceBitMapImage.EndInit();
+
+                image.Source = sourceBitMapImage;
+            }
+        }
+
+        private void DoSomething(object sender, RoutedEventArgs e)
+        {
+            after = blurCsEngine.Blur(sourceBitMapImage.ToBitmap(), slRadius.Value);
+
+            image.Source = after.ToBitmapImage();
         }
     }
 }

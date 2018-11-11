@@ -1,7 +1,5 @@
 ﻿using System.Drawing;
-using System.IO;
 using System.Windows;
-using System.Windows.Data;
 using CsImplementation;
 using Microsoft.Win32;
 
@@ -41,8 +39,8 @@ namespace ProjektJA
             {
                 after = await blurCsEngine.Blur(source, slRadius.Value).ConfigureAwait(false);
             }
-            
-            if(radioPixel.IsChecked.Value)
+
+            if (radioPixel.IsChecked.Value)
             {
                 after = await pixelationCsEngine.Pixelate(source, (int) slRadius.Value).ConfigureAwait(false);
             }

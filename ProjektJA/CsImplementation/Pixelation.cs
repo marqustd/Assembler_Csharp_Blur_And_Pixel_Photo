@@ -15,13 +15,13 @@ namespace CsImplementation
             var toReturn = new Bitmap(source);
             var halfRadius = radius / 2;
 
-            for (var y = halfRadius; y < source.Height; y += radius)
+            for (var y = halfRadius; y < source.Height; y += radius - 1)
             {
-                for (var x = halfRadius; x < source.Width; x += radius)
+                for (var x = halfRadius; x < source.Width; x += radius - 1)
                 {
                     var mainPixel = source.GetPixel(x, y);
 
-                    for (var y2 = y - halfRadius; y2 < y + halfRadius && y2<source.Height; y2++)
+                    for (var y2 = y - halfRadius; y2 < y + halfRadius && y2 < source.Height; y2++)
                     {
                         for (var x2 = x - halfRadius; x2 < x + halfRadius && x2 < source.Width; x2++)
                         {

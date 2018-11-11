@@ -16,6 +16,15 @@
         <StackPanel Grid.Column="0">
             <Label Content="Ustawienia:" />
             <Button Click="OpenFile" Name="btnOpenFile">Otwórz plik</Button>
+            <Label Content="Wybierz proces:" />
+            <Grid VerticalAlignment="Center" Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <RadioButton Grid.Column="0" IsChecked="True">Rozmycie</RadioButton>
+                <RadioButton Grid.Column="1">Pikselowanie</RadioButton>
+            </Grid>
             <Label Content="Wybierz implementacje:" />
             <Grid VerticalAlignment="Center" Margin="10">
                 <Grid.ColumnDefinitions>
@@ -39,7 +48,7 @@
                 <Slider Value="1" Minimum="0.1" Maximum="100" Name="slRadius" />
             </DockPanel>
             <Button Click="DoSomething">Wykonaj</Button>
-            <Button Margin="0 200 0 0">Zapisz plik</Button>
+            <Button>Zapisz plik</Button>
         </StackPanel>
     </Grid>
 

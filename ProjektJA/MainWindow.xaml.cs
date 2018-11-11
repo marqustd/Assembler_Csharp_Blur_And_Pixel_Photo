@@ -1,24 +1,23 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
+using System.IO;
 using System.Windows;
-using System.Windows.Media.Imaging;
-using GaussBlur;
+using System.Windows.Data;
+using CsImplementation;
 using Microsoft.Win32;
 
 namespace ProjektJA
 {
-    /// <summary>
-    ///     Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private readonly IGaussBlurCs blurCsEngine;
+        private readonly IPixelation pixelationCsEngine;
         private Bitmap after;
-        private BitmapImage sourceBitMapImage;
+        private Bitmap source;
 
         public MainWindow()
         {
             blurCsEngine = new GaussBlurCs();
+            pixelationCsEngine = new Pixelation();
             InitializeComponent();
         }
 
@@ -26,24 +25,54 @@ namespace ProjektJA
         {
             var openFileDialog = new OpenFileDialog();
 
-            openFileDialog.Filter = "Obrazy (*.bmp;*.jpg;*.png)|*.bmp;*.jpg;*.png";
+            openFileDialog.Filter = "Bitmapy (*.bmp;)|*.bmp;";
 
             if (openFileDialog.ShowDialog() == true)
             {
-                sourceBitMapImage = new BitmapImage();
-                sourceBitMapImage.BeginInit();
-                sourceBitMapImage.UriSource = new Uri(openFileDialog.FileName);
-                sourceBitMapImage.EndInit();
+                source = new Bitmap(openFileDialog.FileName);
 
-                image.Source = sourceBitMapImage;
+                image.Source = source.ToBitmapImage();
             }
         }
 
-        private void DoSomething(object sender, RoutedEventArgs e)
+        private async void DoOnClick(object sender, RoutedEventArgs e)
         {
-            after = blurCsEngine.Blur(sourceBitMapImage.ToBitmap(), slRadius.Value);
+            if (radioBlur.IsChecked.Value)
+            {
+                after = await blurCsEngine.Blur(source, slRadius.Value).ConfigureAwait(false);
+            }
+            
+            if(radioPixel.IsChecked.Value)
+            {
+                after = await pixelationCsEngine.Pixelate(source, (int) slRadius.Value).ConfigureAwait(false);
+            }
 
             image.Source = after.ToBitmapImage();
+        }
+
+        private void RadioBlur_OnChecked(object sender, RoutedEventArgs e)
+        {
+            slRadius.Minimum = 0.1;
+            slRadius.Maximum = 100;
+            slRadius.IsSnapToTickEnabled = false;
+        }
+
+        private void RadioPixel_OnChecked(object sender, RoutedEventArgs e)
+        {
+            slRadius.Minimum = 3;
+            slRadius.Maximum = 101;
+            slRadius.TickFrequency = 2;
+            slRadius.IsSnapToTickEnabled = true;
+        }
+
+        private void SaveButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog();
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                //todo
+            }
         }
     }
 }

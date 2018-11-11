@@ -1,20 +1,20 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
+using System.Threading.Tasks;
 
-namespace GaussBlur
+namespace CsImplementation
 {
     public interface IGaussBlurCs
     {
-        Bitmap Blur(Bitmap source, double radius);
+        Task<Bitmap> Blur(Bitmap source, double radius);
     }
 
     public class GaussBlurCs : IGaussBlurCs
     {
-        public Bitmap Blur(Bitmap source, double radius)
+        public async Task<Bitmap> Blur(Bitmap source, double radius)
         {
-            for (int x = 0; x < source.Width; x++)
+            for (var x = 0; x < source.Width; x++)
             {
-                for (int y = 0; y < source.Height; y++)
+                for (var y = 0; y < source.Height; y++)
                 {
                     source.SetPixel(x, y, Color.Red);
                 }

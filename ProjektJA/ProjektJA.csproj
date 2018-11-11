@@ -97,9 +97,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="GaussBlur\GaussBlurCs.csproj">
+    <ProjectReference Include="GaussBlur\CsImplementation.csproj">
       <Project>{2308934D-DA62-4430-9DA5-55025FA0CD7E}</Project>
-      <Name>GaussBlurCs</Name>
+      <Name>CsImplementation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

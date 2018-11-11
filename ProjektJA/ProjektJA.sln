@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjektJA", "ProjektJA.csproj", "{B2C8B87E-74D9-49EA-BF82-159F40063248}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GaussBlurCs", "GaussBlur\GaussBlurCs.csproj", "{2308934D-DA62-4430-9DA5-55025FA0CD7E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsImplementation", "GaussBlur\CsImplementation.csproj", "{2308934D-DA62-4430-9DA5-55025FA0CD7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

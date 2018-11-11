@@ -1,50 +1,28 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
 namespace ProjektJA
 {
     public static class Extensions
     {
-        [DllImport("gdi32.dll")]
-        public static extern bool DeleteObject(IntPtr hObject);
-
-        public static Bitmap ToBitmap(this BitmapImage image)
+        public static BitmapImage ToBitmapImage(this Bitmap bitmap)
         {
-            using (var outStream = new MemoryStream())
+            using (var memory = new MemoryStream())
             {
-                var enc = new BmpBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create(image));
-                enc.Save(outStream);
-                var bitmap = new Bitmap(outStream);
+                bitmap.Save(memory, ImageFormat.Png);
+                memory.Position = 0;
 
-                return new Bitmap(bitmap);
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze();
+
+                return bitmapImage;
             }
-        }
-
-        public static BitmapImage ToBitmapImage(this Bitmap image)
-        {
-            var hBitmap = image.GetHbitmap();
-            BitmapImage retval;
-
-            try
-            {
-                retval = (BitmapImage) Imaging.CreateBitmapSourceFromHBitmap(
-                    hBitmap,
-                    IntPtr.Zero,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions());
-            }
-            finally
-            {
-                DeleteObject(hBitmap);
-            }
-
-            return retval;
         }
     }
 }

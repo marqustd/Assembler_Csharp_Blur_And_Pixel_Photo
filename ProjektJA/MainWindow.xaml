@@ -22,8 +22,8 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <RadioButton Grid.Column="0" IsChecked="True">Rozmycie</RadioButton>
-                <RadioButton Grid.Column="1">Pikselowanie</RadioButton>
+                <RadioButton Grid.Column="0" IsChecked="True" Name="radioBlur" Click="RadioBlur_OnChecked">Rozmycie</RadioButton>
+                <RadioButton Grid.Column="1" Name="radioPixel" Click="RadioPixel_OnChecked">Pikselowanie</RadioButton>
             </Grid>
             <Label Content="Wybierz implementacje:" />
             <Grid VerticalAlignment="Center" Margin="10">
@@ -32,12 +32,12 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <CheckBox>Assembler</CheckBox>
+                    <CheckBox IsEnabled="False">Assembler</CheckBox>
                     <CheckBox>C#</CheckBox>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
-                    <CheckBox>C++</CheckBox>
-                    <CheckBox>Python</CheckBox>
+                    <CheckBox IsEnabled="False">C++</CheckBox>
+                    <CheckBox IsEnabled="False">Python</CheckBox>
                 </StackPanel>
 
             </Grid>
@@ -47,8 +47,8 @@
                          DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
                 <Slider Value="1" Minimum="0.1" Maximum="100" Name="slRadius" />
             </DockPanel>
-            <Button Click="DoSomething">Wykonaj</Button>
-            <Button>Zapisz plik</Button>
+            <Button Click="DoOnClick">Wykonaj</Button>
+            <Button Click="SaveButton_OnClick">Zapisz plik</Button>
         </StackPanel>
     </Grid>
 

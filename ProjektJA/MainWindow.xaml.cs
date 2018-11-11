@@ -71,7 +71,7 @@ namespace ProjektJA
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                //todo
+                after.Save(saveFileDialog.FileName);
             }
         }
     }

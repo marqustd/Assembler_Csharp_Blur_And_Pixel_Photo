@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows;
 using CsImplementation;
 using Microsoft.Win32;
@@ -12,8 +13,12 @@ namespace ProjektJA
         private Bitmap after;
         private Bitmap source;
 
+        [DllImport(@"D:\Git\ProjektJA\ProjektJA\Debug\CppImplementation.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern double sum(double x, double y);
+
         public MainWindow()
         {
+            var x = sum(5, 10);
             blurCsEngine = new GaussBlurCs();
             pixelationCsEngine = new Pixelation();
             InitializeComponent();
@@ -23,7 +28,7 @@ namespace ProjektJA
         {
             var openFileDialog = new OpenFileDialog();
 
-            openFileDialog.Filter = "Bitmapy (*.bmp;)|*.bmp;";
+            openFileDialog.Filter = "Obrazy (*.bmp;*.jpg;*.png)|*.bmp;*.jpg;*.png";
 
             if (openFileDialog.ShowDialog() == true)
             {

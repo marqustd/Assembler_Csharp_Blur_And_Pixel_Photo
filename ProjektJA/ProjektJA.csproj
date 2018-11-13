@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B2C8B87E-74D9-49EA-BF82-159F40063248}</ProjectGuid>
+    <ProjectGuid>{3C12A333-20B3-4ED7-AA56-5E2E0DD0ABF7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ProjektJA</RootNamespace>
     <AssemblyName>ProjektJA</AssemblyName>
@@ -97,7 +97,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="CsImplementation\CsImplementation.csproj">
+    <ProjectReference Include="..\CsImplementation\CsImplementation.csproj">
       <Project>{2308934D-DA62-4430-9DA5-55025FA0CD7E}</Project>
       <Name>CsImplementation</Name>
     </ProjectReference>

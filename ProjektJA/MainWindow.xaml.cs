@@ -13,12 +13,12 @@ namespace ProjektJA
         private Bitmap after;
         private Bitmap source;
 
-        [DllImport(@"D:\Git\ProjektJA\ProjektJA\Debug\CppImplementation.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("CppImplementation.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern double sum(double x, double y);
 
         public MainWindow()
         {
-            var x = sum(5, 10);
+            //var x = sum(5, 10);
             blurCsEngine = new GaussBlurCs();
             pixelationCsEngine = new Pixelation();
             InitializeComponent();

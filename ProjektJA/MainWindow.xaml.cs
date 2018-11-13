@@ -18,7 +18,7 @@ namespace ProjektJA
 
         public MainWindow()
         {
-            //var x = sum(5, 10);
+            var x = sum(5, 10);
             blurCsEngine = new GaussBlurCs();
             pixelationCsEngine = new Pixelation();
             InitializeComponent();

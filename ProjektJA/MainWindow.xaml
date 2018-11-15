@@ -11,11 +11,12 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
-        <Image Grid.Column="1" Name="image" />
+        <Image Grid.Column="1" Name="image"
+               Source="{Binding Path=ImageSource, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
 
         <StackPanel Grid.Column="0">
             <Label Content="Ustawienia:" />
-            <Button Click="OpenFile" Name="btnOpenFile">Otwórz plik</Button>
+            <Button Click="OnOpenFileClick" Name="btnOpenFile">Otwórz plik</Button>
             <Label Content="Wybierz proces:" />
             <Grid VerticalAlignment="Center" Margin="10">
                 <Grid.ColumnDefinitions>

@@ -1,7 +1,9 @@
-﻿using System.Drawing;
-using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows;
-using CsImplementation;
+using ImageFilters.GaussBlur;
+using ImageFilters.Pixelate;
 using Microsoft.Win32;
 using ProjektJA.Model.Data;
 
@@ -9,32 +11,38 @@ namespace ProjektJA
 {
     public partial class MainWindow : Window
     {
-        private readonly IGaussBlurCs blurCsEngine;
-        private readonly IPixelation pixelationCsEngine;
-
         public MainWindow()
         {
             DataContext = new DataContext();
-            var x = sum(5, 10);
-            blurCsEngine = new GaussBlurCs();
-            pixelationCsEngine = new Pixelation();
             InitializeComponent();
-        }
 
-        [DllImport("CppImplementation.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern double sum(double x, double y);
+            btnFilter.IsEnabled = false;
+
+            slMask.Minimum = 3;
+            slMask.Maximum = 101;
+            slMask.TickFrequency = 2;
+            slMask.IsSnapToTickEnabled = true;
+
+            slRadius.Minimum = 0.1;
+            slRadius.Maximum = 100;
+            slRadius.IsSnapToTickEnabled = false;
+
+            ProgressLabel.Visibility = Visibility.Hidden;
+        }
 
         private void OnOpenFileClick(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog();
             var context = DataContext as DataContext;
+            btnFilter.IsEnabled = false;
 
-            openFileDialog.Filter = "Obrazy (*.bmp;*.jpg;*.png)|*.bmp;*.jpg;*.png";
+            openFileDialog.Filter = "Obrazy (*.bmp;*.jpg;)|*.bmp;*.jpg;";
 
             if (openFileDialog.ShowDialog() == true)
             {
                 context.Source = new Bitmap(openFileDialog.FileName);
                 context.ImageSource = context.Source.ToBitmapImage();
+                btnFilter.IsEnabled = true;
             }
         }
 
@@ -42,38 +50,82 @@ namespace ProjektJA
         {
             var context = DataContext as DataContext;
             var source = new Bitmap(context.Source);
+            var maskSize = (int) slMask.Value;
+            var radius = slRadius.Value;
 
-            if (radioBlur.IsChecked.Value)
-                context.After = await blurCsEngine.Blur(source, slRadius.Value).ConfigureAwait(false);
+            var stopWatch = Stopwatch.StartNew();
+            ProgressLabel.Visibility = Visibility.Visible;
+            if (radioAssembler.IsChecked.Value) //assembler
+            {
+                if (radioBlur.IsChecked.Value) //asembler blur
+                {
+                    await Task.Run(() =>
+                    {
+                        var engine = new GaussBlurrAsm(maskSize, radius);
+                        context.After = engine.FilterUnsafe(source);
+                    });
+                }
+                else //assembler pixel
+                {
+                    await Task.Run(() =>
+                    {
+                        var engine = new PixelationAsm(maskSize);
+                        context.After = engine.FilterUnsafe(source);
+                    });
+                }
+            }
+            else //Csharp
+            {
+                if (radioBlur.IsChecked.Value) //Csharp blur
+                {
+                    await Task.Run(() =>
+                    {
+                        var engine = new GaussBlurCsharp(maskSize, radius);
+                        context.After = engine.FilterUnsafe(source);
+                    });
+                }
+                else //Csharp pixel
+                {
+                    await Task.Run(() =>
+                    {
+                        var engine = new PixelationCsharp(maskSize);
+                        context.After = engine.FilterUnsafe(source);
+                    });
+                }
+            }
 
-            if (radioPixel.IsChecked.Value)
-                context.After = await pixelationCsEngine.PixelateAsync(source, (int) slRadius.Value);
-
+            stopWatch.Stop();
+            ProgressLabel.Visibility = Visibility.Hidden;
+            timeLabel.Content = $"Czas[ms]: {stopWatch.ElapsedMilliseconds}";
             context.ImageSource = context.After.ToBitmapImage();
         }
 
         private void RadioBlur_OnChecked(object sender, RoutedEventArgs e)
         {
-            slRadius.Minimum = 0.1;
-            slRadius.Maximum = 100;
-            slRadius.IsSnapToTickEnabled = false;
+            slRadius.IsEnabled = true;
+            slRadius.Visibility = Visibility.Visible;
+            boxRadius.Visibility = Visibility.Visible;
+            labelRadius.Visibility = Visibility.Visible;
         }
 
         private void RadioPixel_OnChecked(object sender, RoutedEventArgs e)
         {
-            slRadius.Minimum = 3;
-            slRadius.Maximum = 101;
-            slRadius.TickFrequency = 2;
-            slRadius.IsSnapToTickEnabled = true;
+            slRadius.IsEnabled = false;
+            slRadius.Visibility = Visibility.Hidden;
+            boxRadius.Visibility = Visibility.Hidden;
+            labelRadius.Visibility = Visibility.Hidden;
         }
 
         private void SaveButton_OnClick(object sender, RoutedEventArgs e)
         {
             var saveFileDialog = new SaveFileDialog();
             var context = DataContext as DataContext;
+            saveFileDialog.Filter = "Obrazy (*.bmp;)|*.bmp;";
 
-
-            if (saveFileDialog.ShowDialog() == true) context.After.Save(saveFileDialog.FileName);
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                context.After.Save(saveFileDialog.FileName);
+            }
         }
     }
 }

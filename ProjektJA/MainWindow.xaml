@@ -14,6 +14,7 @@
         <Image Grid.Column="1" Name="image"
                Source="{Binding Path=ImageSource, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
 
+        <!--Ustawienia-->
         <StackPanel Grid.Column="0">
             <Label Content="Ustawienia:" />
             <Button Click="OnOpenFileClick" Name="btnOpenFile">Otwórz plik</Button>
@@ -32,24 +33,32 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0">
-                    <CheckBox IsEnabled="False">Assembler</CheckBox>
-                    <CheckBox>C#</CheckBox>
-                </StackPanel>
-                <StackPanel Grid.Column="1">
-                    <CheckBox IsEnabled="False">C++</CheckBox>
-                    <CheckBox IsEnabled="False">Python</CheckBox>
-                </StackPanel>
-
+                <RadioButton Grid.Column="0" IsChecked="True" Name="radioCsharp">C#</RadioButton>
+                <RadioButton Grid.Column="1" Name="radioAssembler">Assembler</RadioButton>
+                <!--Suwaki-->
             </Grid>
-            <Label Content="Promień:" />
+            <!--Maska-->
+            <Label Content="Wielkość maski:" />
             <DockPanel VerticalAlignment="Center" Margin="10">
-                <TextBox Text="{Binding ElementName=slRadius, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                <TextBox Text="{Binding ElementName=slMask, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                         DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Slider Value="1" Minimum="0.1" Maximum="100" Name="slMask" />
+            </DockPanel>
+            <!--Maska-->
+            <!--Promien-->
+            <Label Name="labelRadius" Content="Promień:" />
+            <DockPanel VerticalAlignment="Center" Margin="10">
+                <TextBox Name="boxRadius"
+                         Text="{Binding ElementName=slRadius, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                          DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
                 <Slider Value="1" Minimum="0.1" Maximum="100" Name="slRadius" />
             </DockPanel>
-            <Button Click="DoOnClick">Wykonaj</Button>
+            <!--Promien-->
+            <Button Name="btnFilter" Click="DoOnClick">Wykonaj</Button>
             <Button Click="SaveButton_OnClick">Zapisz plik</Button>
+            <!--Czas-->
+            <Label Name="ProgressLabel">Proces w toku...</Label>
+            <Label Name="timeLabel">Czas:</Label>
         </StackPanel>
     </Grid>
 

@@ -124,7 +124,8 @@ namespace ProjektJA.Annotations
             FormatParameterName = formatParameterName;
         }
 
-        [NotNull] public string FormatParameterName { get; }
+        [NotNull]
+        public string FormatParameterName { get; }
     }
 
     /// <summary>
@@ -141,7 +142,8 @@ namespace ProjektJA.Annotations
             Name = name;
         }
 
-        [NotNull] public string Name { get; }
+        [NotNull]
+        public string Name { get; }
     }
 
     /// <summary>
@@ -231,7 +233,8 @@ namespace ProjektJA.Annotations
             ParameterName = parameterName;
         }
 
-        [CanBeNull] public string ParameterName { get; }
+        [CanBeNull]
+        public string ParameterName { get; }
     }
 
     /// <summary>
@@ -304,7 +307,8 @@ namespace ProjektJA.Annotations
             ForceFullStates = forceFullStates;
         }
 
-        [NotNull] public string Contract { get; }
+        [NotNull]
+        public string Contract { get; }
 
         public bool ForceFullStates { get; }
     }
@@ -384,7 +388,8 @@ namespace ProjektJA.Annotations
             BaseType = baseType;
         }
 
-        [NotNull] public Type BaseType { get; }
+        [NotNull]
+        public Type BaseType { get; }
     }
 
     /// <summary>
@@ -448,9 +453,11 @@ namespace ProjektJA.Annotations
             TargetFlags = targetFlags;
         }
 
-        [UsedImplicitly] public ImplicitUseKindFlags UseKindFlags { get; private set; }
+        [UsedImplicitly]
+        public ImplicitUseKindFlags UseKindFlags { get; private set; }
 
-        [UsedImplicitly] public ImplicitUseTargetFlags TargetFlags { get; private set; }
+        [UsedImplicitly]
+        public ImplicitUseTargetFlags TargetFlags { get; private set; }
     }
 
     [Flags]
@@ -507,7 +514,8 @@ namespace ProjektJA.Annotations
             Comment = comment;
         }
 
-        [CanBeNull] public string Comment { get; }
+        [CanBeNull]
+        public string Comment { get; }
     }
 
     /// <summary>
@@ -553,7 +561,8 @@ namespace ProjektJA.Annotations
             Justification = justification;
         }
 
-        [CanBeNull] public string Justification { get; }
+        [CanBeNull]
+        public string Justification { get; }
     }
 
     /// <summary>
@@ -597,7 +606,8 @@ namespace ProjektJA.Annotations
             BasePath = basePath;
         }
 
-        [CanBeNull] public string BasePath { get; }
+        [CanBeNull]
+        public string BasePath { get; }
     }
 
     /// <summary>
@@ -694,7 +704,8 @@ namespace ProjektJA.Annotations
             Format = format;
         }
 
-        [NotNull] public string Format { get; }
+        [NotNull]
+        public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple =
@@ -706,7 +717,8 @@ namespace ProjektJA.Annotations
             Format = format;
         }
 
-        [NotNull] public string Format { get; }
+        [NotNull]
+        public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple =
@@ -718,7 +730,8 @@ namespace ProjektJA.Annotations
             Format = format;
         }
 
-        [NotNull] public string Format { get; }
+        [NotNull]
+        public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple =
@@ -730,7 +743,8 @@ namespace ProjektJA.Annotations
             Format = format;
         }
 
-        [NotNull] public string Format { get; }
+        [NotNull]
+        public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple =
@@ -742,7 +756,8 @@ namespace ProjektJA.Annotations
             Format = format;
         }
 
-        [NotNull] public string Format { get; }
+        [NotNull]
+        public string Format { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple =
@@ -754,7 +769,8 @@ namespace ProjektJA.Annotations
             Format = format;
         }
 
-        [NotNull] public string Format { get; }
+        [NotNull]
+        public string Format { get; }
     }
 
     /// <summary>
@@ -775,7 +791,8 @@ namespace ProjektJA.Annotations
             AnonymousProperty = anonymousProperty;
         }
 
-        [CanBeNull] public string AnonymousProperty { get; }
+        [CanBeNull]
+        public string AnonymousProperty { get; }
     }
 
     /// <summary>
@@ -795,7 +812,8 @@ namespace ProjektJA.Annotations
             AnonymousProperty = anonymousProperty;
         }
 
-        [CanBeNull] public string AnonymousProperty { get; }
+        [CanBeNull]
+        public string AnonymousProperty { get; }
     }
 
     /// <summary>
@@ -816,7 +834,8 @@ namespace ProjektJA.Annotations
             AnonymousProperty = anonymousProperty;
         }
 
-        [CanBeNull] public string AnonymousProperty { get; }
+        [CanBeNull]
+        public string AnonymousProperty { get; }
     }
 
     /// <summary>
@@ -945,7 +964,8 @@ namespace ProjektJA.Annotations
             Name = name;
         }
 
-        [CanBeNull] public string Name { get; }
+        [CanBeNull]
+        public string Name { get; }
     }
 
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
@@ -956,7 +976,8 @@ namespace ProjektJA.Annotations
             Name = name;
         }
 
-        [NotNull] public string Name { get; }
+        [NotNull]
+        public string Name { get; }
     }
 
     /// <summary>
@@ -1125,9 +1146,11 @@ namespace ProjektJA.Annotations
             ControlType = controlType;
         }
 
-        [NotNull] public string TagName { get; }
+        [NotNull]
+        public string TagName { get; }
 
-        [NotNull] public Type ControlType { get; }
+        [NotNull]
+        public Type ControlType { get; }
     }
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
@@ -1153,7 +1176,8 @@ namespace ProjektJA.Annotations
             Attribute = attribute;
         }
 
-        [NotNull] public string Attribute { get; }
+        [NotNull]
+        public string Attribute { get; }
     }
 
     [AttributeUsage(AttributeTargets.Property)]
@@ -1175,7 +1199,8 @@ namespace ProjektJA.Annotations
             Name = name;
         }
 
-        [NotNull] public string Name { get; }
+        [NotNull]
+        public string Name { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -1187,9 +1212,11 @@ namespace ProjektJA.Annotations
             FieldName = fieldName;
         }
 
-        [NotNull] public string Type { get; }
+        [NotNull]
+        public string Type { get; }
 
-        [NotNull] public string FieldName { get; }
+        [NotNull]
+        public string FieldName { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -1200,7 +1227,8 @@ namespace ProjektJA.Annotations
             Directive = directive;
         }
 
-        [NotNull] public string Directive { get; }
+        [NotNull]
+        public string Directive { get; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -1217,8 +1245,11 @@ namespace ProjektJA.Annotations
             PageName = pageName;
         }
 
-        [NotNull] public string BaseType { get; }
-        [CanBeNull] public string PageName { get; }
+        [NotNull]
+        public string BaseType { get; }
+
+        [CanBeNull]
+        public string PageName { get; }
     }
 
     [AttributeUsage(AttributeTargets.Method)]

@@ -1,0 +1,5 @@
+LIBRARY "AsmImplementation.dll"
+EXPORTS  
+	gauss   @1
+	border   @2
+	pixelRow @3

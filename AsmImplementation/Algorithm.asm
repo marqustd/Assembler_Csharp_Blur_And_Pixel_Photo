@@ -1,6 +1,7 @@
 .data 
 ; amount of bytes in one pixel
 BytesInPixel dword 4
+Minus dword -1 ; minus to invert numbers
 .code
 ; ==============================================================
 ; Main procedure used for blurring one pixel image row, 
@@ -163,8 +164,7 @@ SETPIXEL:
 ; increment current index in bitmap
 	add ecx, BytesInPixel
 	cmp R13D,R14D
-	jz CLEARSTACK
-	jmp ROWLOOP
+	jnz ROWLOOP
 
 CLEARSTACK:
 ; clear stack
@@ -208,14 +208,102 @@ XLOOP:
 ; increment loop
 add ebx, BytesInPixel
 cmp r8d, ebx
-jz FINISHED
-jmp XLOOP
+jnz XLOOP
 
 FINISHED:
 ret
 border endp
 
+
+; ==============================================================
+; Procedure to pixel a row 
+; ### PARAMETERS ###
+;	int columnsToFilter,	RCX 					[how many times the operation should be done for a row]
+;	int rowIndex,			RDX (moved to EBX)		[row index]
+;	int* original,			R8						[int array of original image]
+;	int* pixelated,			R9						[int array of pixelated image]
+;	int rowCounter,			STACK [rbp+48] 			[row counter to find main pixel]
+;	int sourceWitdh,		STACK [rbp+56] 			[widht of the original file]
+;	int boumd,				STACK [rbp+64]			[widht of pixelation radius]
+; 	int radius,             STACK [rbp+72]			[Mask radius]
+; ### USED REGISTERS ###
+;	R10D, main pixel position	
+;	R11D, row loop index
+;	R12D, radius loop param
+;	R13, Pixel position
+; ==============================================================
 pixelRow proc
+; prepare for stack deallocation
+push rbp
+mov rbp, rsp
+push rax
+push rbx
+push rcx
+push rdx
+push r12
+push r13
+
+mov rbx, rdx
+;calculate main pixel ptr
+mov eax, dword ptr [rbp+56]
+add rax, 1
+mul dword ptr [rbp+64]
+mov r10, rax
+mov rax, rbx
+sub eax, dword ptr [rbp+48]
+mul dword ptr [rbp+56]
+add rax, r10
+mul BytesInPixel
+mov r10, rax
+
+;calculate pixel position
+mov rax, rbx
+mul dword ptr [rbp+56]
+mul BytesInPixel
+mov r13, rax
+
+mov r11, rcx;columns to filter
+ROWLOOP:
+mov r12d, dword ptr [rbp+72];radius
+mov eax, dword ptr [r8+r10];main pixel
+RADIUSLOOP:
+mov dword ptr [r9+r13], eax
+add r13, 4
+dec r12
+jnz RADIUSLOOP
+mov eax, dword ptr [rbp+72]
+mul BytesInPixel
+add r10d, eax;main pixel + radius*4
+dec r11
+jnz ROWLOOP
+
+mov rax, rcx; columns to filter
+mul dword ptr [rbp+72]
+imul Minus
+add eax, dword ptr [rbp+56]
+mov r12, rax;r12 pixels left
+
+mov eax, dword ptr [rbp+64]
+mul BytesInPixel
+mul Minus
+add r10d, eax
+mov eax, dword ptr [r8+r10]
+LASTLOOP:
+mov dword ptr [r9+r13], eax
+add r13, 4
+dec r12
+jnz LASTLOOP
+
+CLEARSTACK:
+; clear stack
+	pop r13
+	pop r12
+	pop rdx
+	pop rcx
+	pop rbx
+	pop rax
+	pop rbp
+	ret
 pixelRow endp
 
 

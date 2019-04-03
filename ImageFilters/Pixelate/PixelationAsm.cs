@@ -17,13 +17,13 @@ namespace ImageFilters.Pixelate
         public unsafe Bitmap FilterUnsafe(Bitmap source)
         {
             var bitmap = new Bitmap(source);
-            var dataArraySize = Consts.BytesInPixel * bitmap.Width * bitmap.Height;
+            var dataArraySize = bitmap.Width * bitmap.Height;
             var data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite,
                 PixelFormat.Format32bppArgb);
-            var original = (byte*) data.Scan0;
+            var original = (int*) data.Scan0;
 
-            var filtered = new byte[dataArraySize];
-            fixed (byte* filteredPtr = filtered)
+            var filtered = new int[dataArraySize];
+            fixed (int* filteredPtr = filtered)
             {
                 PixelateUnsafe(original, filteredPtr, source);
                 Marshal.Copy(filtered, 0, (IntPtr) original, dataArraySize);
@@ -34,11 +34,11 @@ namespace ImageFilters.Pixelate
         }
 
         [DllImport("AsmImplementation.dll", EntryPoint = "pixelRow")]
-        private static extern unsafe void PixelRowUnsafeAsm(byte* original, byte* pixelated, int rowCounter,
-            int columnsToFilter, int row,
-            int sourceWidth, int bound);
+        private static extern unsafe void PixelRowUnsafeAsm(int columnsToFilter, int row,
+            int* original, int* pixelated,
+            int rowCounter, int sourceWidth, int bound, int radius);
 
-        private unsafe void PixelateUnsafe(byte* original, byte* pixelated, Bitmap source)
+        private unsafe void PixelateUnsafe(int* original, int* pixelated, Bitmap source)
         {
             var bound = (radius - 1) / 2;
             var columnsToFilter = source.Width / radius;
@@ -48,7 +48,7 @@ namespace ImageFilters.Pixelate
             var row = 0;
             for (; row < rowsToFilter; row++) //rzedy ktore sie mieszcza
             {
-                PixelRowUnsafeAsm(original, pixelated, rowCounter++, columnsToFilter, row, source.Width, bound);
+                PixelRowUnsafeAsm(columnsToFilter, row, original, pixelated, rowCounter++, source.Width, bound, radius);
                 if (!(rowCounter < radius))
                 {
                     rowCounter = 0;
@@ -58,7 +58,7 @@ namespace ImageFilters.Pixelate
             rowCounter = bound + 1;
             for (; row < source.Height; row++) //reszta pikseli
             {
-                PixelRowUnsafeAsm(original, pixelated, rowCounter++, columnsToFilter, row, source.Width, bound);
+                PixelRowUnsafeAsm(columnsToFilter, row, original, pixelated, rowCounter++, source.Width, bound, radius);
             }
         }
     }

@@ -17,13 +17,13 @@ namespace ImageFilters.Pixelate
         public unsafe Bitmap FilterUnsafe(Bitmap source)
         {
             var bitmap = new Bitmap(source);
-            var dataArraySize = Consts.BytesInPixel * bitmap.Width * bitmap.Height;
+            var dataArraySize = bitmap.Width * bitmap.Height;
             var data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite,
                 PixelFormat.Format32bppArgb);
-            var original = (byte*) data.Scan0;
+            var original = (int*) data.Scan0;
 
-            var filtered = new byte[dataArraySize];
-            fixed (byte* filteredPtr = filtered)
+            var filtered = new int[dataArraySize];
+            fixed (int* filteredPtr = filtered)
             {
                 PixelateUnsafe(original, filteredPtr, source);
                 Marshal.Copy(filtered, 0, (IntPtr) original, dataArraySize);
@@ -33,7 +33,7 @@ namespace ImageFilters.Pixelate
             return bitmap;
         }
 
-        private unsafe void PixelateUnsafe(byte* original, byte* pixelated, Bitmap source)
+        private unsafe void PixelateUnsafe(int* original, int* pixelated, Bitmap source)
         {
             var bound = (radius - 1) / 2;
             var columnsToFilter = source.Width / radius;
@@ -57,48 +57,32 @@ namespace ImageFilters.Pixelate
             }
         }
 
-        private unsafe void PixelRowUnsafe(byte* original, byte* pixelated, int rowCounter, int columnsToFilter,
+        private unsafe void PixelRowUnsafe(int* original, int* pixelated, int rowCounter, int columnsToFilter,
             int rowIndex, int arrayWidth, int bound)
         {
-            var mainPixelIndex = Consts.BytesInPixel *
-                                 ((rowIndex - rowCounter) * arrayWidth + bound +
-                                  bound * arrayWidth); //Pierwszy piksel z ktorego bierzemy kolor
-            var pixelIndex = rowIndex * arrayWidth * Consts.BytesInPixel; //pierwszy indeks do zmiany koloru
-            var R = original[mainPixelIndex];
-            var G = original[mainPixelIndex + 1];
-            var B = original[mainPixelIndex + 2];
-            var A = original[mainPixelIndex + 3];
+            var mainPixelIndex = (rowIndex - rowCounter) * arrayWidth + bound +
+                                 bound * arrayWidth; //Pierwszy piksel z ktorego bierzemy kolor
+            var pixelIndex = rowIndex * arrayWidth; //pierwszy indeks do zmiany koloru
+            var pixel = original[mainPixelIndex];
             for (var i = 0; i < columnsToFilter; i++) //przejscie po calym rzedzie
             {
                 for (var j = 0; j < radius; j++) //przejscie po radius
                 {
-                    pixelated[pixelIndex + j * Consts.BytesInPixel] = R;
-                    pixelated[pixelIndex + j * Consts.BytesInPixel + 1] = G;
-                    pixelated[pixelIndex + j * Consts.BytesInPixel + 2] = B;
-                    pixelated[pixelIndex + j * Consts.BytesInPixel + 3] = A;
+                    pixelated[pixelIndex + j] = pixel;
                 }
 
-                pixelIndex += radius * Consts.BytesInPixel;
-                mainPixelIndex += radius * Consts.BytesInPixel;
-                R = original[mainPixelIndex];
-                G = original[mainPixelIndex + 1];
-                B = original[mainPixelIndex + 2];
-                A = original[mainPixelIndex + 3];
+                pixelIndex += radius;
+                mainPixelIndex += radius;
+                pixel = original[mainPixelIndex];
             }
 
             var pixelsLeft = arrayWidth - columnsToFilter * radius; //reszta
-            mainPixelIndex -= bound * Consts.BytesInPixel; //pierwszy piksel przy brzegu
-            R = original[mainPixelIndex];
-            G = original[mainPixelIndex + 1];
-            B = original[mainPixelIndex + 2];
-            A = original[mainPixelIndex + 3];
+            mainPixelIndex -= bound; //pierwszy piksel przy brzegu
+            pixel = original[mainPixelIndex];
 
             for (var j = 0; j < pixelsLeft; j++)
             {
-                pixelated[pixelIndex + j * Consts.BytesInPixel] = R;
-                pixelated[pixelIndex + j * Consts.BytesInPixel + 1] = G;
-                pixelated[pixelIndex + j * Consts.BytesInPixel + 2] = B;
-                pixelated[pixelIndex + j * Consts.BytesInPixel + 3] = A;
+                pixelated[pixelIndex + j] = pixel;
             }
         }
     }
